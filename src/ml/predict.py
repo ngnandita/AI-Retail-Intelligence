@@ -1,8 +1,7 @@
 import pandas as pd
-
 import joblib
 
-model = joblib.load("models/sales_prediction_model_v2.pkl")
+model = joblib.load("models/xgboost_model.pkl")
 
 sample = pd.DataFrame({
 
@@ -16,4 +15,4 @@ sample = pd.DataFrame({
 
 prediction = model.predict(sample)
 
-print(prediction)
+print("Predicted Sales:", prediction[0])
