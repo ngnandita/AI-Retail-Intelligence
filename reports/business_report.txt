@@ -1,20 +1,27 @@
-AI Retail Intelligence Platform
-Business Insights Report
 
-1. Highest Sales Category:
-Technology
+=============================
+AI RETAIL INTELLIGENCE REPORT
+=============================
 
-2. Highest Profit State:
-California
+Total Orders : 9994
 
-3. Top 10 Products:
-(Program output ke according likho)
+Total Sales : 2297200.86
 
-4. Top 10 Customers:
-(Program output ke according likho)
+Total Profit : 286397.02
 
-5. Business Recommendations:
-- Increase inventory for top-selling products.
-- Reduce discount on low-profit products.
-- Focus marketing on top-performing states.
-- Reward loyal customers with special offers.
+Average Sales : 229.86
+
+Top Category : Technology
+
+Top Profit State : California
+
+Top Customer : Sean Miller
+
+Recommendations
+
+1. Increase stock of top-selling category.
+2. Reward loyal customers.
+3. Reduce discounts where profit is low.
+4. Focus marketing on profitable states.
+
+=============================
