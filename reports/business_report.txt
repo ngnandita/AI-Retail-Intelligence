@@ -1,0 +1,20 @@
+AI Retail Intelligence Platform
+Business Insights Report
+
+1. Highest Sales Category:
+Technology
+
+2. Highest Profit State:
+California
+
+3. Top 10 Products:
+(Program output ke according likho)
+
+4. Top 10 Customers:
+(Program output ke according likho)
+
+5. Business Recommendations:
+- Increase inventory for top-selling products.
+- Reduce discount on low-profit products.
+- Focus marketing on top-performing states.
+- Reward loyal customers with special offers.
