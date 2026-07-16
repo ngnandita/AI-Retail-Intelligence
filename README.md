@@ -1,6 +1,31 @@
+# 🛍️ AI Retail Intelligence Platform
 
-# AI Retail Intelligence Platform
+## 📌 Overview
+An AI-powered Retail Analytics Platform built using Python.
 
-An AI-powered Retail Analytics Platform built using Python, Machine Learning, Data Analytics and Streamlit.
+## 🚀 Features
+- Sales Analysis
+- Customer Analysis
+- Data Visualization
+- Sales Forecasting (Coming Soon)
+- Customer Segmentation (Coming Soon)
 
-Project Started: July 2026
+## 🛠 Tech Stack
+- Python
+- Pandas
+- Matplotlib
+- Plotly
+- Scikit-learn
+
+## 📂 Project Structure
+
+AI-Retail-Intelligence/
+├── dataset/
+├── src/
+├── models/
+├── reports/
+├── README.md
+
+## 👩‍💻 Author
+
+Nandita Gargayan
