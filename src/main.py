@@ -1,0 +1,1 @@
+print("Welcome to AI Retail Intelligence Platform")
