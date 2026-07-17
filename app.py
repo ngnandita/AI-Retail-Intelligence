@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 import plotly.express as px
+import matplotlib.pyplot as plt
 
 # ============================
 # Page Configuration
@@ -43,16 +44,20 @@ else:
 # ============================
 # Load ML Model
 # ============================
-
 model = joblib.load("models/xgboost_model.pkl")
+
+
 
 # ============================
 # Title
 # ============================
-
 st.title("🛒 AI Retail Intelligence")
+st.markdown("""
+# 🛒 AI Retail Intelligence
+### AI Powered Retail Analytics Dashboard
+Predict Sales • Analyze Profit • Business Insights • Machine Learning
+""")
 
-st.markdown("### AI Powered Sales Prediction Dashboard")
 
 # ============================
 # Metrics
@@ -165,6 +170,52 @@ st.download_button(
     mime="text/csv"
 )
 
+st.markdown("---")
+st.header("Monthly Sales Trend")
+
+df["Order Date"] = pd.to_datetime(
+    df["Order Date"],
+    dayfirst=True
+)
+
+monthly_sales = (
+    df.groupby(df["Order Date"].dt.to_period("M"))["Sales"]
+    .sum()
+    .reset_index()
+)
+
+monthly_sales["Order Date"] = monthly_sales["Order Date"].astype(str)
+
+fig3 = px.line(
+    monthly_sales,
+    x="Order Date",
+    y="Sales",
+    markers=True,
+    title="Monthly Sales Trend"
+)
+st.plotly_chart(
+    fig3,
+    use_container_width=True
+)
+
+#Show Dataset Preview#
+st.markdown("---")
+st.header("Dataset Preview")
+
+#DataSet Information#
+st.header("Dataset Information")
+col1, col2 = st.columns(2)
+with col1:
+    st.metric("Rows", filtered_df.shape[0])
+with col2:
+    st.metric("Columns", filtered_df.shape[1])
+
+
+st.dataframe(
+    filtered_df.head(10),
+    use_container_width=True
+)
+
 # Sales by Category
 
 st.subheader("Sales by Category")
@@ -196,12 +247,6 @@ fig = px.bar(
 
 st.subheader("Top 10 Sub-Categories")
 
-top_products = (
-    filtered_df.groupby("Sub-Category")["Sales"]
-      .sum()
-      .sort_values(ascending=False)
-      .head(10)
-)
 
 top_products = (
     df.groupby("Sub-Category")["Sales"]
@@ -223,6 +268,10 @@ fig2 = px.bar(
 
     title="Top 10 Products"
 
+)
+st.plotly_chart(
+    fig2,
+    use_container_width=True
 )
 
 
@@ -256,6 +305,11 @@ st.info(
 st.info(
     f"Average Discount : {df['Discount'].mean():.2%}"
 )
+
+
+
+
+
 
 st.markdown("---")
 st.header("Model Performance")
@@ -309,3 +363,29 @@ with col2:
         use_container_width=True,
         key="pie_chart"
     )
+
+    best_month = monthly_sales.loc[
+    monthly_sales["Sales"].idxmax()
+]
+
+st.success(
+    f"🏆 Best Sales Month: {best_month['Order Date']} (₹ {best_month['Sales']:,.2f})"
+)
+
+##Correlation Heatmap#
+st.markdown("---")
+st.header("Correlation Analysis")
+corr = filtered_df.select_dtypes(include="number").corr()
+fig, ax = plt.subplots(figsize=(8,6))
+im = ax.imshow(corr)
+ax.set_xticks(range(len(corr.columns)))
+ax.set_xticklabels(corr.columns, rotation=90)
+ax.set_yticks(range(len(corr.columns)))
+ax.set_yticklabels(corr.columns)
+plt.colorbar(im)
+st.pyplot(fig)
+
+#Footer#
+st.markdown("---")
+st.caption("Developed by Nandita Gargayan")
+st.caption("AI Retail Intelligence | 2026")
