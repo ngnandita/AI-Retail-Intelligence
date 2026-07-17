@@ -4,7 +4,25 @@ import joblib
 import plotly.express as px
 import matplotlib.pyplot as plt
 import os
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
 
+def create_pdf(report_text):
+
+    pdf_path = "reports/business_report.pdf"
+
+    doc = SimpleDocTemplate(pdf_path)
+
+    styles = getSampleStyleSheet()
+
+    story = []
+
+    for line in report_text.split("\n"):
+        story.append(Paragraph(line, styles["Normal"]))
+
+    doc.build(story)
+
+    return pdf_path
 
 # ============================
 # Page Configuration
@@ -226,11 +244,9 @@ if st.button("Predict Sales"):
 
     sample = pd.DataFrame({
 
-        "Quantity":[quantity],
-
-        "Discount":[discount],
-
-        "Profit":[profit]
+        "Quantity": [quantity],
+        "Discount": [discount],
+        "Profit": [profit]
 
     })
 
@@ -238,19 +254,23 @@ if st.button("Predict Sales"):
 
     history_path = "history/prediction_history.csv"
 
-history = pd.DataFrame({
-    "Quantity":[quantity],
-    "Discount":[discount],
-    "Profit":[profit],
-    "Predicted_Sales":[prediction[0]]
-})
+    history = pd.DataFrame({
 
-history.to_csv(
-    history_path,
-    mode="a",
-    header=not os.path.exists(history_path),
-    index=False
-)
+        "Quantity": [quantity],
+        "Discount": [discount],
+        "Profit": [profit],
+        "Predicted_Sales": [prediction[0]]
+
+    })
+
+    history.to_csv(
+
+        history_path,
+        mode="a",
+        header=not os.path.exists(history_path),
+        index=False
+
+    )
 
     st.success(
         f"Predicted Sales : ₹ {prediction[0]:.2f}"
@@ -267,9 +287,13 @@ Predicted Sales : {prediction[0]:.2f}
 """
 
     st.download_button(
+
         "Download Prediction",
+
         prediction_text,
+
         file_name="prediction.txt"
+
     )
 
     st.balloons()
@@ -484,7 +508,56 @@ st.info(
     f"Average Discount : {df['Discount'].mean():.2%}"
 )
 
+st.markdown("---")
+st.header("📄 Business Report")
 
+report = f"""
+
+pdf_file = create_pdf(report)
+
+with open(pdf_file, "rb") as file:
+
+    st.download_button(
+
+        label="📄 Download PDF Report",
+
+        data=file,
+
+        file_name="business_report.pdf",
+
+        mime="application/pdf"
+    )
+AI Retail Intelligence Report
+
+===============================
+
+Total Orders : {len(df)}
+
+Total Sales : ₹ {df['Sales'].sum():,.2f}
+
+Total Profit : ₹ {df['Profit'].sum():,.2f}
+
+Average Discount : {df['Discount'].mean():.2%}
+
+Best Category : {best_category}
+
+Generated using AI Retail Intelligence Dashboard
+
+Developed by Nandita Gargayan
+"""
+
+st.text_area(
+    "Report Preview",
+    report,
+    height=250
+)
+
+st.download_button(
+    label="📥 Download Business Report",
+    data=report,
+    file_name="business_report.txt",
+    mime="text/plain"
+)
 
 
 
