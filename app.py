@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import plotly.express as px
 
 # ============================
 # Page Configuration
@@ -12,11 +13,22 @@ st.set_page_config(
     layout="wide"
 )
 
-# ============================
-# Load Dataset
-# ============================
+st.sidebar.title("🛒 AI Retail Intelligence")
 
-df = pd.read_csv("dataset/clean_superstore.csv")
+
+
+
+uploaded_file = st.sidebar.file_uploader(
+    "Upload CSV",
+    type=["csv"]
+)
+
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+else:
+    df = pd.read_csv("dataset/clean_superstore.csv")
+
+
 
 # ============================
 # Load ML Model
@@ -78,14 +90,15 @@ profit = st.number_input(
     "Profit",
     value=120.0
 )
-
 if st.button("Predict Sales"):
 
     sample = pd.DataFrame({
 
-        "Quantity": [quantity],
-        "Discount": [discount],
-        "Profit": [profit]
+        "Quantity":[quantity],
+
+        "Discount":[discount],
+
+        "Profit":[profit]
 
     })
 
@@ -95,25 +108,73 @@ if st.button("Predict Sales"):
         f"Predicted Sales : ₹ {prediction[0]:.2f}"
     )
 
-st.markdown("---")
+    prediction_text = f"""
+Quantity : {quantity}
+
+Discount : {discount}
+
+Profit : {profit}
+
+Predicted Sales : {prediction[0]:.2f}
+"""
+
+    st.download_button(
+        "Download Prediction",
+        prediction_text,
+        file_name="prediction.txt"
+    )
+
+    st.balloons()
 
 # ============================
 # Business Dashboard
 # ============================
 
 st.header("Business Dashboard")
+pie = px.pie(
+
+    df,
+
+    names="Category",
+
+    values="Sales",
+
+    title="Category Distribution"
+
+)
+
+st.plotly_chart(
+    pie,
+    use_container_width=True
+)
 
 # Sales by Category
 
 st.subheader("Sales by Category")
 
+
+
 category_sales = (
     df.groupby("Category")["Sales"]
       .sum()
-      .sort_values()
+      .reset_index()
 )
 
-st.bar_chart(category_sales)
+fig = px.bar(
+
+    category_sales,
+
+    x="Category",
+
+    y="Sales",
+
+    color="Category",
+
+    title="Sales by Category"
+
+)
+
+st.plotly_chart(fig, use_container_width=True)
 
 # Top Products
 
@@ -126,7 +187,32 @@ top_products = (
       .head(10)
 )
 
-st.bar_chart(top_products)
+top_products = (
+    df.groupby("Sub-Category")["Sales"]
+      .sum()
+      .sort_values(ascending=False)
+      .head(10)
+      .reset_index()
+)
+
+fig2 = px.bar(
+
+    top_products,
+
+    x="Sub-Category",
+
+    y="Sales",
+
+    color="Sales",
+
+    title="Top 10 Products"
+
+)
+
+st.plotly_chart(
+    fig2,
+    use_container_width=True
+)
 
 st.markdown("---")
 
