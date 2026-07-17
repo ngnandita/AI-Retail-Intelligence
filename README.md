@@ -1,5 +1,8 @@
 # 🛍️ AI Retail Intelligence Platform
 
+##Live Demo
+https://ai-retail-intelligence-gqmz5uzj8va8n6hpirg3lz.streamlit.app/
+
 ## 📌 Overview
 An AI-powered Retail Analytics Platform built using Python.
 
