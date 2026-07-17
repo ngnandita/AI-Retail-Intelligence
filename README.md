@@ -1,3 +1,12 @@
+![Python](https://img.shields.io/badge/Python-3.13-blue)
+
+![Streamlit](https://img.shields.io/badge/Streamlit-Live-red)
+
+![Machine Learning](https://img.shields.io/badge/Machine-Learning-green)
+
+![XGBoost](https://img.shields.io/badge/XGBoost-AI-orange)
+
+
 # 🛍️ AI Retail Intelligence Platform
 
 ## Live Demo
@@ -10,7 +19,18 @@ An AI-powered Retail Analytics Platform built using Python.
 
 ![App](images/live_app.png)
 
+### Home
+![Home](images/home.png)
 
+---
+
+### Prediction
+![Prediction](images/prediction.png)
+
+---
+
+### Dashboard
+![Dashboard](images/dashboard.png)
 ## 🚀 Features
 - Sales Analysis
 - Customer Analysis
