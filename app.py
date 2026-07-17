@@ -28,7 +28,17 @@ if uploaded_file is not None:
 else:
     df = pd.read_csv("dataset/clean_superstore.csv")
 
+st.sidebar.header("Filters")
 
+category = st.sidebar.selectbox(
+    "Select Category",
+    ["All"] + sorted(df["Category"].unique().tolist())
+)
+
+if category != "All":
+    filtered_df = df[df["Category"] == category]
+else:
+    filtered_df = df
 
 # ============================
 # Load ML Model
@@ -148,6 +158,13 @@ st.plotly_chart(
     use_container_width=True
 )
 
+st.download_button(
+    label="Download Dashboard Data",
+    data=filtered_df.to_csv(index=False),
+    file_name="dashboard_data.csv",
+    mime="text/csv"
+)
+
 # Sales by Category
 
 st.subheader("Sales by Category")
@@ -155,7 +172,7 @@ st.subheader("Sales by Category")
 
 
 category_sales = (
-    df.groupby("Category")["Sales"]
+    filtered_df.groupby("Category")["Sales"]
       .sum()
       .reset_index()
 )
@@ -174,14 +191,13 @@ fig = px.bar(
 
 )
 
-st.plotly_chart(fig, use_container_width=True)
 
 # Top Products
 
 st.subheader("Top 10 Sub-Categories")
 
 top_products = (
-    df.groupby("Sub-Category")["Sales"]
+    filtered_df.groupby("Sub-Category")["Sales"]
       .sum()
       .sort_values(ascending=False)
       .head(10)
@@ -209,10 +225,7 @@ fig2 = px.bar(
 
 )
 
-st.plotly_chart(
-    fig2,
-    use_container_width=True
-)
+
 
 st.markdown("---")
 
@@ -243,3 +256,56 @@ st.info(
 st.info(
     f"Average Discount : {df['Discount'].mean():.2%}"
 )
+
+st.markdown("---")
+st.header("Model Performance")
+
+performance = pd.DataFrame({
+    "Model": [
+        "Linear Regression",
+        "Random Forest",
+        "XGBoost"
+    ],
+    "R2 Score": [
+        0.32,
+        0.36,
+        0.39
+    ]
+})
+
+st.dataframe(performance, use_container_width=True)
+
+best_model = performance.loc[
+    performance["R2 Score"].idxmax(),
+    "Model"
+]
+
+st.success(f"🏆 Best Performing Model: {best_model}")
+
+st.markdown("---")
+
+st.markdown(
+    """
+    ### 👩‍💻 Developed by Nandita Gargayan
+
+    AI Retail Intelligence Project
+
+    Built using Python, Streamlit, XGBoost and Data Analytics.
+    """
+)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.plotly_chart(
+        fig,
+        use_container_width=True,
+        key="sales_chart"
+    )
+
+with col2:
+    st.plotly_chart(
+        pie,
+        use_container_width=True,
+        key="pie_chart"
+    )
