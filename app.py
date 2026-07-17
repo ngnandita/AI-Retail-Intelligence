@@ -41,6 +41,13 @@ if category != "All":
 else:
     filtered_df = df
 
+    st.sidebar.download_button(
+    "📥 Download Dataset",
+    df.to_csv(index=False),
+    file_name="superstore_dataset.csv",
+    mime="text/csv"
+)
+
 # ============================
 # Load ML Model
 # ============================
@@ -57,6 +64,30 @@ st.markdown("""
 ### AI Powered Retail Analytics Dashboard
 Predict Sales • Analyze Profit • Business Insights • Machine Learning
 """)
+
+st.markdown("---")
+
+kpi1, kpi2, kpi3, kpi4 = st.columns(4)
+
+kpi1.metric(
+    "💰 Total Sales",
+    f"₹ {df['Sales'].sum():,.0f}"
+)
+
+kpi2.metric(
+    "📈 Total Profit",
+    f"₹ {df['Profit'].sum():,.0f}"
+)
+
+kpi3.metric(
+    "📦 Orders",
+    len(df)
+)
+
+kpi4.metric(
+    "🎯 Avg Discount",
+    f"{df['Discount'].mean()*100:.2f}%"
+)
 
 
 # ============================
@@ -278,6 +309,51 @@ st.plotly_chart(
 
 st.markdown("---")
 
+st.markdown("---")
+st.header("Region Wise Sales")
+
+region_sales = (
+    df.groupby("Region")["Sales"]
+    .sum()
+    .reset_index()
+)
+
+fig_region = px.bar(
+    region_sales,
+    x="Region",
+    y="Sales",
+    color="Region",
+    title="Sales by Region"
+)
+
+st.plotly_chart(
+    fig_region,
+    use_container_width=True,
+    key="region_sales"
+)
+
+st.header("Segment Wise Sales")
+
+segment_sales = (
+    df.groupby("Segment")["Sales"]
+    .sum()
+    .reset_index()
+)
+
+fig_segment = px.pie(
+    segment_sales,
+    names="Segment",
+    values="Sales",
+    hole=0.4,
+    title="Segment Distribution"
+)
+
+st.plotly_chart(
+    fig_segment,
+    use_container_width=True,
+    key="segment_chart"
+)
+
 # ============================
 # Business Insights
 # ============================
@@ -389,3 +465,22 @@ st.pyplot(fig)
 st.markdown("---")
 st.caption("Developed by Nandita Gargayan")
 st.caption("AI Retail Intelligence | 2026")
+
+#AI Business Recommendation#
+st.markdown("---")
+st.header("🤖 AI Business Recommendation")
+
+best_category = df.groupby("Category")["Profit"].sum().idxmax()
+worst_category = df.groupby("Category")["Profit"].sum().idxmin()
+
+st.success(
+    f"✅ Highest Profit Category : {best_category}"
+)
+
+st.warning(
+    f"⚠️ Lowest Profit Category : {worst_category}"
+)
+
+st.info(
+    "Recommendation: Increase inventory and marketing for the highest-profit category while improving pricing or cost strategy for the lowest-profit category."
+)
