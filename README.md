@@ -40,7 +40,11 @@ Superstore Sales Dataset
 
 ---
 
-## Live Demo
+## 🚀 Live Demo
+
+🔗 **Try the Live Application:**
+
+https://ai-retail-intelligence-gqmz5uzj8va8n6hpirg3lz.streamlit.app/
 
 ## Developer
 
