@@ -14,7 +14,58 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+<style>
+
+.main{
+    background-color:#F8F9FA;
+}
+
+h1{
+    color:#1565C0;
+}
+
+h2{
+    color:#00897B;
+}
+
+div[data-testid="metric-container"]{
+    background:#ffffff;
+    border-radius:15px;
+    padding:15px;
+    box-shadow:0px 3px 10px rgba(0,0,0,0.15);
+}
+
+footer{
+    visibility:hidden;
+}
+
+#MainMenu{
+    visibility:hidden;
+}
+
+header{
+    visibility:hidden;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 st.sidebar.title("🛒 AI Retail Intelligence")
+
+st.sidebar.markdown("---")
+
+st.sidebar.info("""
+👩‍💻 Developer
+
+Nandita Gargayan
+
+B.Tech CSE
+
+LNCT Group of Colleges
+""")
+
+st.sidebar.markdown("---")
 
 
 
@@ -61,8 +112,10 @@ model = joblib.load("models/xgboost_model.pkl")
 st.title("🛒 AI Retail Intelligence")
 st.markdown("""
 # 🛒 AI Retail Intelligence
-### AI Powered Retail Analytics Dashboard
-Predict Sales • Analyze Profit • Business Insights • Machine Learning
+
+### AI Powered Business Analytics Dashboard
+
+Predict Sales • Business Insights • Machine Learning • Data Analytics
 """)
 
 st.markdown("---")
@@ -112,6 +165,10 @@ col3.metric(
 )
 
 st.markdown("---")
+
+st.success(
+    "✅ Welcome to AI Retail Intelligence Dashboard"
+)
 
 # ============================
 # Sales Prediction
@@ -448,6 +505,22 @@ st.success(
     f"🏆 Best Sales Month: {best_month['Order Date']} (₹ {best_month['Sales']:,.2f})"
 )
 
+st.markdown("---")
+
+st.header("Executive Summary")
+
+st.write(f"""
+• Total Orders : **{len(df)}**
+
+• Total Sales : **₹ {df['Sales'].sum():,.2f}**
+
+• Total Profit : **₹ {df['Profit'].sum():,.2f}**
+
+• Best Category : **{best_category}**
+
+• Average Discount : **{df['Discount'].mean()*100:.2f}%**
+""")
+
 ##Correlation Heatmap#
 st.markdown("---")
 st.header("Correlation Analysis")
@@ -463,8 +536,20 @@ st.pyplot(fig)
 
 #Footer#
 st.markdown("---")
-st.caption("Developed by Nandita Gargayan")
-st.caption("AI Retail Intelligence | 2026")
+
+st.markdown("""
+<center>
+
+### 👩‍💻 Developed by Nandita Gargayan
+
+AI Retail Intelligence Dashboard
+
+Python • Streamlit • XGBoost • Plotly
+
+© 2026 All Rights Reserved
+
+</center>
+""", unsafe_allow_html=True)
 
 #AI Business Recommendation#
 st.markdown("---")
