@@ -3,6 +3,8 @@ import pandas as pd
 import joblib
 import plotly.express as px
 import matplotlib.pyplot as plt
+import os
+
 
 # ============================
 # Page Configuration
@@ -104,12 +106,39 @@ else:
 # ============================
 model = joblib.load("models/xgboost_model.pkl")
 
+st.markdown("---")
+st.header("Prediction History")
+
+history = pd.read_csv("history/prediction_history.csv")
+
+st.dataframe(
+    history,
+    use_container_width=True
+)
+
+search = st.text_input("🔍 Search by Quantity")
+
+if search:
+    result = history[
+        history["Quantity"].astype(str).str.contains(search)
+    ]
+    st.dataframe(
+        result,
+        use_container_width=True
+    )
+
+    st.download_button(
+    "📥 Download Prediction History",
+    history.to_csv(index=False),
+    file_name="prediction_history.csv",
+    mime="text/csv"
+)
 
 
 # ============================
 # Title
 # ============================
-st.title("🛒 AI Retail Intelligence")
+
 st.markdown("""
 # 🛒 AI Retail Intelligence
 
@@ -206,6 +235,22 @@ if st.button("Predict Sales"):
     })
 
     prediction = model.predict(sample)
+
+    history_path = "history/prediction_history.csv"
+
+history = pd.DataFrame({
+    "Quantity":[quantity],
+    "Discount":[discount],
+    "Profit":[profit],
+    "Predicted_Sales":[prediction[0]]
+})
+
+history.to_csv(
+    history_path,
+    mode="a",
+    header=not os.path.exists(history_path),
+    index=False
+)
 
     st.success(
         f"Predicted Sales : ₹ {prediction[0]:.2f}"
@@ -569,3 +614,19 @@ st.warning(
 st.info(
     "Recommendation: Increase inventory and marketing for the highest-profit category while improving pricing or cost strategy for the lowest-profit category."
 )
+
+if st.button("🗑 Clear Prediction History"):
+
+    pd.DataFrame(
+        columns=[
+            "Quantity",
+            "Discount",
+            "Profit",
+            "Predicted_Sales"
+        ]
+    ).to_csv(
+        "history/prediction_history.csv",
+        index=False
+    )
+
+    st.success("History Cleared Successfully")
